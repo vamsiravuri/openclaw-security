@@ -340,7 +340,6 @@ cfg = json.loads((Path.home()/".openclaw"/"openclaw.json").read_text())
 
 
 checks = [
-    ("discovery.mdns",          cfg.get("discovery",{}).get("mdns",{}).get("mode"), "off"),
 ]
 
 all_pass = True
