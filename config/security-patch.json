@@ -1,0 +1,32 @@
+{
+  "agents": {
+    "defaults": {
+      "sandbox": {
+        "mode": "all",
+        "scope": "session",
+        "docker": {
+          "readOnlyRoot": true,
+          "user": "1000:1000",
+          "capDrop": [
+            "ALL"
+          ],
+          "pidsLimit": 256,
+          "memory": "512m"
+        }
+      }
+    }
+  },
+  "tools": {
+    "elevated": {
+      "enabled": false
+    },
+    "deny": [
+      "nodes"
+    ]
+  },
+  "discovery": {
+    "mdns": {
+      "mode": "off"
+    }
+  }
+}
