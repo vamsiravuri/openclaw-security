@@ -1,15 +1,4 @@
 {
-  "agents": {
-    "defaults": {}
-  },
-  "tools": {
-    "elevated": {
-      "enabled": false
-    },
-    "deny": [
-      "nodes"
-    ]
-  },
   "discovery": {
     "mdns": {
       "mode": "off"

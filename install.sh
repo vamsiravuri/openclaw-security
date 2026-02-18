@@ -338,11 +338,8 @@ from pathlib import Path
 
 cfg = json.loads((Path.home()/".openclaw"/"openclaw.json").read_text())
 
-tools = cfg.get("tools",{})
 
 checks = [
-    ("tools.elevated",          tools.get("elevated",{}).get("enabled"),  False),
-    ("tools.deny",              tools.get("deny"),                        ["nodes"]),
     ("discovery.mdns",          cfg.get("discovery",{}).get("mdns",{}).get("mode"), "off"),
 ]
 
