@@ -1,7 +1,1 @@
-{
-  "discovery": {
-    "mdns": {
-      "mode": "off"
-    }
-  }
-}
+{}
