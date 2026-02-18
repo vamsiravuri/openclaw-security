@@ -229,10 +229,7 @@ patch = json.loads(patch_file.read_text())
 merged = deep_merge(cfg, patch)
 
 
-# Ensure tools.deny only has "nodes", not browser/canvas
-tools = merged.get("tools", {})
-    tools["deny"] = ["nodes"]
-    print("  Fixed: tools.deny → ['nodes'] only (browser/canvas unblocked)")
+
 
 config_file.write_text(json.dumps(merged, indent=2) + "\n")
 print("  Config merged successfully")
