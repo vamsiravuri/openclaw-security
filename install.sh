@@ -27,7 +27,7 @@ else
   SCRIPT_DIR="$(mktemp -d)"
   PIPE_MODE=true
   echo "[INFO] Pipe mode detected -- downloading assets from GitHub..."
-  curl -fsSL "$GITHUB_RAW/security-patch.json" -o "$SCRIPT_DIR/security-patch.json"
+  curl -fsSL "$GITHUB_RAW/config/security-patch.json" -o "$SCRIPT_DIR/security-patch.json"
   mkdir -p "$SCRIPT_DIR/skills/security-validation"
   mkdir -p "$SCRIPT_DIR/skills/command-guard"
   mkdir -p "$SCRIPT_DIR/skills/prompt-injection-detector"
