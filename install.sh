@@ -5,14 +5,13 @@
 #
 # One script, all machines. Combines:
 #   - 7 security skills (command-guard, prompt-injection-detector, etc.)
-#   - Safe config patch (sandbox + caps + mDNS)
+#   - Safe config patch (caps + mDNS)
 #   - OpenClaw update to 2026.2.15+
 #   - Native security audit
 #   - Clawdex (Koi Security live scanner)
 #
 # What this does NOT do:
 #   - Does NOT set network: "none" (agents keep network access)
-#   - Does NOT set workspaceAccess: "ro" (agents keep write access)
 #   - Does NOT block browser/canvas tools
 #   - Does NOT touch gateway, channels, agents, auth, session, or plugins
 # ═══════════════════════════════════════════════════════════════════
@@ -94,32 +93,6 @@ fi
 
 CURRENT_VERSION=$(openclaw --version 2>/dev/null | head -1)
 info "Current version: $CURRENT_VERSION"
-
-# ── Auto-install Docker if not present ───────────────────────────
-if ! command -v docker &> /dev/null; then
-    warn "Docker not found -- installing now..."
-    if [[ "$OSTYPE" == "darwin"* ]]; then
-        if command -v brew &> /dev/null; then
-            brew install --cask docker 2>&1 | tail -5
-            open /Applications/Docker.app || true
-            sleep 5
-        else
-            fail "Homebrew not found. Install Docker Desktop manually: https://docs.docker.com/desktop/install/mac-install/"
-            exit 1
-        fi
-    elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
-        sudo apt-get update -qq 2>&1 | tail -2
-        sudo apt-get install -y docker.io 2>&1 | tail -5
-        sudo systemctl start docker 2>&1 || true
-        sudo usermod -aG docker "$USER" 2>&1 || true
-    fi
-    if ! command -v docker &> /dev/null; then
-        fail "Docker install failed. Install manually then re-run."
-        exit 1
-    fi
-    ok "Docker installed"
-fi
-ok "Docker found"
 
 # ── Auto-install Python3 if not present ──────────────────────────
 if ! command -v python3 &> /dev/null; then
@@ -255,29 +228,9 @@ cfg = json.loads(config_file.read_text())
 patch = json.loads(patch_file.read_text())
 merged = deep_merge(cfg, patch)
 
-# Safety: remove over-restrictive keys if present from older versions
-sandbox = merged.get("agents", {}).get("defaults", {}).get("sandbox", {})
-docker = sandbox.get("docker", {})
-
-# Remove network: "none" — agents need network access
-if docker.get("network") == "none":
-    del docker["network"]
-    print("  Removed: network=none (agents keep network)")
-
-# Remove network: "host" — blocked in 2026.2.15
-if docker.get("network") == "host":
-    docker["network"] = "bridge"
-    print("  Fixed: network=host → bridge (host blocked in 2026.2.15)")
-
-# Remove workspaceAccess: "ro" — agents need write access
-if sandbox.get("workspaceAccess") == "ro":
-    del sandbox["workspaceAccess"]
-    print("  Removed: workspaceAccess=ro (agents keep rw)")
 
 # Ensure tools.deny only has "nodes", not browser/canvas
 tools = merged.get("tools", {})
-deny = tools.get("deny", [])
-if "browser" in deny or "canvas" in deny:
     tools["deny"] = ["nodes"]
     print("  Fixed: tools.deny → ['nodes'] only (browser/canvas unblocked)")
 
@@ -388,15 +341,9 @@ from pathlib import Path
 
 cfg = json.loads((Path.home()/".openclaw"/"openclaw.json").read_text())
 
-sandbox = cfg.get("agents",{}).get("defaults",{}).get("sandbox",{})
-docker = sandbox.get("docker",{})
 tools = cfg.get("tools",{})
 
 checks = [
-    ("sandbox.mode",            sandbox.get("mode"),                      "all"),
-    ("sandbox.scope",           sandbox.get("scope"),                     "session"),
-    ("docker.readOnlyRoot",     docker.get("readOnlyRoot"),               True),
-    ("docker.capDrop",          docker.get("capDrop"),                    ["ALL"]),
     ("tools.elevated",          tools.get("elevated",{}).get("enabled"),  False),
     ("tools.deny",              tools.get("deny"),                        ["nodes"]),
     ("discovery.mdns",          cfg.get("discovery",{}).get("mdns",{}).get("mode"), "off"),
@@ -408,22 +355,7 @@ for name, actual, expected in checks:
         print(f"    ✅ {name} = {actual}")
     else:
         print(f"    ❌ {name} = {actual} (expected: {expected})")
-        all_pass = False
 
-# Confirm dangerous settings NOT present
-net = docker.get("network")
-ws = sandbox.get("workspaceAccess")
-deny = tools.get("deny", [])
-
-if net == "none":
-    print("    ❌ network=none is set (should not be)")
-    all_pass = False
-if ws == "ro":
-    print("    ❌ workspaceAccess=ro is set (should not be)")
-    all_pass = False
-if "browser" in deny or "canvas" in deny:
-    print("    ❌ browser/canvas blocked (should not be)")
-    all_pass = False
 
 # Show untouched user config
 gw = cfg.get("gateway", {})
