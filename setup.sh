@@ -48,6 +48,11 @@ SKILLS=(
     "security-validation"
     "session-isolation-enforcer"
     "skill-security-scanner"
+    "memory-poisoning-detector"
+    "indirect-injection-detector"
+    "denial-of-wallet-guard"
+    "agent-identity-verifier"
+    "salami-slicing-detector"
 )
 for skill in "${SKILLS[@]}"; do
     mkdir -p "$SKILLS_DIR/$skill"
