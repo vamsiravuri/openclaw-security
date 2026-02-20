@@ -96,7 +96,7 @@ openclaw cron add \
     --every "24h" \
     --description "Nightly security skill updates managed by Vamsi Ravuri" \
     --session isolated \
-    --announce \
+    --no-deliver \
     --timeout 120000 \
     --message "$CRON_MESSAGE" 2>/dev/null || fail "Failed to register nightly cron"
 ok "Nightly security patch cron registered with dynamic skill discovery"
