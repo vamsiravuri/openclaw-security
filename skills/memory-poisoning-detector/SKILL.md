@@ -1,3 +1,8 @@
+---
+name: memory-poisoning-detector
+description: >
+  Monitors agent memory for malicious or manipulated entries persisting across sessions. Detects and alerts only — never modifies or wipes memory.
+---
 # Memory Poisoning Detector
 
 ## Purpose

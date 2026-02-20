@@ -1,3 +1,8 @@
+---
+name: salami-slicing-detector
+description: >
+  Tracks behavioral drift across sessions to detect multi-step prompt campaigns that gradually shift agent behavior toward unauthorized actions. Reports only.
+---
 # Salami Slicing Detector
 
 ## Purpose

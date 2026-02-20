@@ -1,3 +1,8 @@
+---
+name: denial-of-wallet-guard
+description: >
+  Monitors for runaway agent loops and unbounded API usage that could cause excessive compute costs. Alerts only — never terminates agent sessions.
+---
 # Denial of Wallet Guard
 
 ## Purpose

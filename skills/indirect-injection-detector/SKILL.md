@@ -1,3 +1,8 @@
+---
+name: indirect-injection-detector
+description: >
+  Detects prompt injection attacks from external content sources — web pages, documents, emails, GitHub issues. Observes and reports only — never blocks content.
+---
 # Indirect Injection Detector
 
 ## Purpose

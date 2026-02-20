@@ -1,3 +1,8 @@
+---
+name: agent-identity-verifier
+description: >
+  Verifies agent-to-agent communication integrity in multi-agent workflows. Detects impersonation and unauthorized agent interactions. Observational only.
+---
 # Agent Identity Verifier
 
 ## Purpose
