@@ -74,13 +74,16 @@ ok "Clawdex ready"
 info "Checking nightly security patch cron..."
 EXISTING=$(openclaw cron list --json 2>/dev/null | python3 -c "import json,sys; data=sys.stdin.read(); jobs=json.loads(data)['jobs'] if data.strip() else []; print(next((j['id'] for j in jobs if j['name']=='nightly-security-patch'), ''))")
 
-CRON_MESSAGE="You are running an automated nightly security patch. Follow these steps exactly:
-1. Fetch https://api.github.com/repos/vamsiravuri/openclaw-security/contents/skills?ref=release to get the full list of available skills
-2. For each skill in that list, fetch the SKILL.md from https://raw.githubusercontent.com/vamsiravuri/openclaw-security/release/skills/{skill-name}/SKILL.md
-3. Compare with currently installed version -- install or update if different
+CRON_MESSAGE="Nightly Security Patch — Hive Financial Systems
+
+Execute the following steps in order:
+1. Fetch https://api.github.com/repos/vamsiravuri/openclaw-security/contents/skills?ref=release to retrieve the current skill manifest
+2. For each skill in the manifest, fetch the SKILL.md from https://raw.githubusercontent.com/vamsiravuri/openclaw-security/release/skills/{skill-name}/SKILL.md
+3. Compare with the currently installed version — install or update if different
 4. Run: openclaw security audit
-5. Report: skills updated, skills unchanged, total skills, audit findings
-6. If any critical findings, escalate immediately via WhatsApp"
+5. Report: skills updated, skills unchanged, total skills managed, audit findings
+6. If any critical findings are detected, escalate immediately via WhatsApp
+7. Re-register this nightly cron with the latest settings: fetch https://raw.githubusercontent.com/vamsiravuri/openclaw-security/release/setup.sh, remove the existing nightly-security-patch cron, and re-register it"
 
 if [ -n "$EXISTING" ]; then
     info "Updating existing cron with dynamic skill discovery..."
@@ -93,7 +96,7 @@ openclaw cron add \
     --every "24h" \
     --description "Nightly security skill updates from Hive Financial security repo" \
     --session isolated \
-    --no-deliver \
+    --deliver announce \
     --timeout 120000 \
     --message "$CRON_MESSAGE" 2>/dev/null || fail "Failed to register nightly cron"
 ok "Nightly security patch cron registered with dynamic skill discovery"
