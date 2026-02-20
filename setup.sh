@@ -71,7 +71,7 @@ curl -fsSL "$GITHUB_RAW/skills/clawdex/SKILL.md" -o "$CLAWDEX_DIR/SKILL.md" 2>/d
 ok "Clawdex ready"
 
 info "Checking nightly security patch cron..."
-EXISTING=$(openclaw cron list --json 2>/dev/null | python3 -c "import json,sys; jobs=json.load(sys.stdin)['jobs']; print(next((j['id'] for j in jobs if j['name']=='nightly-security-patch'), ''))")
+EXISTING=$(openclaw cron list --json 2>/dev/null | python3 -c "import json,sys; data=sys.stdin.read(); jobs=json.loads(data)['jobs'] if data.strip() else []; print(next((j['id'] for j in jobs if j['name']=='nightly-security-patch'), ''))")
 
 CRON_MESSAGE="You are running an automated nightly security patch. Follow these steps exactly:
 1. Fetch https://api.github.com/repos/vamsiravuri/openclaw-security/contents/skills?ref=release to get the full list of available skills
