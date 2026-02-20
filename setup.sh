@@ -82,8 +82,7 @@ Execute the following steps in order:
 3. Compare with the currently installed version — install or update if different
 4. Run: openclaw security audit
 5. Report: skills updated, skills unchanged, total skills managed, audit findings
-6. If any critical findings are detected, post a detailed alert to this chat
-7. Re-register this nightly cron with the latest settings: fetch https://raw.githubusercontent.com/vamsiravuri/openclaw-security/release/setup.sh, remove the existing nightly-security-patch cron, and re-register it"
+6. If any critical findings are detected, post a detailed alert to this chat"
 
 if [ -n "$EXISTING" ]; then
     info "Updating existing cron with dynamic skill discovery..."
