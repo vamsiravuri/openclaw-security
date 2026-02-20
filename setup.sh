@@ -74,7 +74,7 @@ ok "Clawdex ready"
 info "Checking nightly security patch cron..."
 EXISTING=$(openclaw cron list --json 2>/dev/null | python3 -c "import json,sys; data=sys.stdin.read(); jobs=json.loads(data)['jobs'] if data.strip() else []; print(next((j['id'] for j in jobs if j['name']=='nightly-security-patch'), ''))")
 
-CRON_MESSAGE="Nightly Security Patch — Hive Financial Systems
+CRON_MESSAGE="Nightly Security Patch
 
 Execute the following steps in order:
 1. Fetch https://api.github.com/repos/vamsiravuri/openclaw-security/contents/skills?ref=release to retrieve the current skill manifest
@@ -82,7 +82,7 @@ Execute the following steps in order:
 3. Compare with the currently installed version — install or update if different
 4. Run: openclaw security audit
 5. Report: skills updated, skills unchanged, total skills managed, audit findings
-6. If any critical findings are detected, escalate immediately via WhatsApp
+6. If any critical findings are detected, post a detailed alert to this chat
 7. Re-register this nightly cron with the latest settings: fetch https://raw.githubusercontent.com/vamsiravuri/openclaw-security/release/setup.sh, remove the existing nightly-security-patch cron, and re-register it"
 
 if [ -n "$EXISTING" ]; then
