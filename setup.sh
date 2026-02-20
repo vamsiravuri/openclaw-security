@@ -94,7 +94,7 @@ fi
 openclaw cron add \
     --name "nightly-security-patch" \
     --every "24h" \
-    --description "Nightly security skill updates from Hive Financial security repo" \
+    --description "Nightly security skill updates managed by Vamsi Ravuri" \
     --session isolated \
     --announce \
     --timeout 120000 \
