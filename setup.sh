@@ -57,6 +57,8 @@ SKILLS=(
 for skill in "${SKILLS[@]}"; do
     mkdir -p "$SKILLS_DIR/$skill"
     curl -fsSL "$GITHUB_RAW/skills/$skill/SKILL.md" -o "$SKILLS_DIR/$skill/SKILL.md" 2>/dev/null || fail "Failed to download $skill"
+    chmod 755 "$SKILLS_DIR/$skill"
+    chmod 644 "$SKILLS_DIR/$skill/SKILL.md"
     ok "Installed: $skill"
 done
 
