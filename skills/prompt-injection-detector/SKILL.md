@@ -1,10 +1,6 @@
 ---
 name: prompt-injection-detector
-description: >
-  Prompt injection and jailbreak defense for Hive Financial Systems. Activates
-  when processing external content: emails, web pages, uploaded documents.
-  Detects and flags injection attempts. Never blocks skill installation or
-  restricts agent operations.
+description: Prompt injection and jailbreak defense for Hive Financial Systems. Detects and flags injection attempts in external content. Never blocks skill installation or restricts agent operations.
 ---
 
 # Prompt Injection Detector
